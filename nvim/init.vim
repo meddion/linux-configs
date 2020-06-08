@@ -1,6 +1,6 @@
 " General 
 syntax on
-"set termguicolors
+set termguicolors
 set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ї],фa,іs,вd,аf,пg,рh,оj,лk,дl,ж\\;,є',ґ\\,яz,чx,сc,мv,иb,тn,ьm,ю.,./,ЙQ,ЦW,УE,КR,ЕT,НY,НY,ГU,ШI,ЩO,ЗP,Х{,Ї},ФA,ІS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж\\:,Є\\",Ґ<bar>,ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Б\\<,Ю>,№#
 set encoding=UTF-8
 set hidden
@@ -23,7 +23,7 @@ set mouse=a
 if !has('nvim')
     set ttymouse=xterm2
 endif
-let mapleader=","
+let mapleader=" "
 
 fun! SetupCommandAlias(from, to)
   exec 'cnoreabbrev <expr> '.a:from
@@ -56,8 +56,8 @@ endif
 "let $NVIM_COC_LOG_LEVEL='debug'
 if exists("$MYVIMRC_DIR")
     for f in split(glob($MYVIMRC_DIR.'/*.vim'), '\n')
-	if f ==# $MYVIMRC | continue | endif
-    exe 'source' f
+        if f ==# $MYVIMRC | continue | endif
+        exe 'source' f
     endfor
 else
     echoerr "$MYVIMRC_DIR isn't set"
@@ -76,6 +76,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 call plug#end()
 
+" fzf
+nmap <leader>f :FZF<CR>
 " gruvbox
 let g:gruvbox_contrast_dark = 'medium'
 colorscheme gruvbox
@@ -105,10 +107,14 @@ call SetupCommandAlias("H","vert h")
 call SetupCommandAlias("Vb","vert belowright sb")
 
 " Other shortcuts
+nnoremap <leader><CR> :source $MYVIMRC<CR>
+nnoremap <leader>+ :vertical resize +5<CR>
+nnoremap <leader>- :vertical resize -5<CR>
 noremap <leader>o o<esc>
 noremap <leader>O O<esc>
 if has('nvim')
     tnoremap <Esc> <C-\><C-n>
+    tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 endif
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 map <F5> :setlocal spell! spelllang=en_us,uk<CR>

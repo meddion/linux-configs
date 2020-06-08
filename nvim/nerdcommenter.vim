@@ -8,5 +8,5 @@ let g:NERDTrimTrailingWhitespace = 1
 let g:NERDDefaultAlign = 'left'
 " Allow commenting and inverting empty lines (useful when commenting a region)
 let g:NERDCommentEmptyLines = 1
-nmap <leader>/ <plug>nerdcommentertoggle
+nmap <leader>/ <plug>NERDCommenterToggle
 vmap <leader>/ <plug>NERDCommenterToggle
