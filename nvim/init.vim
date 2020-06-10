@@ -1,9 +1,9 @@
-" General 
 syntax on
 set termguicolors
 set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ї],фa,іs,вd,аf,пg,рh,оj,лk,дl,ж\\;,є',ґ\\,яz,чx,сc,мv,иb,тn,ьm,ю.,./,ЙQ,ЦW,УE,КR,ЕT,НY,НY,ГU,ШI,ЩO,ЗP,Х{,Ї},ФA,ІS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж\\:,Є\\",Ґ<bar>,ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Б\\<,Ю>,№#
 set encoding=UTF-8
 set hidden
+set confirm
 set noerrorbells
 set tabstop=4 softtabstop=4
 set shiftwidth=4
@@ -12,16 +12,17 @@ set smartindent
 set relativenumber
 set nonu
 set nowrap
+set splitright
 set smartcase
 set noswapfile
-set nobackup
-set undodir=~/.vim/undodir
 set undofile
 set incsearch
 set colorcolumn=80
 set mouse=a
 if !has('nvim')
     set ttymouse=xterm2
+    set nobackup
+    set undodir=~/.vim/undodir
 endif
 let mapleader=" "
 
@@ -45,12 +46,7 @@ if empty(glob(s:plug_dir.'/autoload/plug.vim'))
     silent exe "!curl -fLo ".s:plug_dir."/autoload/plug.vim --create-dirs
           \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
     autocmd VimEnter * PlugInstall --sync  
-    if exists("$MYVIMRC")
-    	source $MYVIMRC
-    else
-    	echoerr "$MYVIMRC isn't set"	
-    endif
-	 
+    if exists("$MYVIMRC") | source $MYVIMRC | else | echoerr "$MYVIMRC isn't set" | endif
 endif
 
 "let $NVIM_COC_LOG_LEVEL='debug'
@@ -64,14 +60,16 @@ else
 endif
 
 call plug#begin(s:plug_dir.'/plugged')
-Plug 'morhetz/gruvbox'
+" nerdtree related plugins
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'preservim/nerdcommenter'
+" else
+Plug 'morhetz/gruvbox'
 Plug 'junegunn/goyo.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'preservim/nerdcommenter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 call plug#end()
@@ -83,12 +81,6 @@ let g:gruvbox_contrast_dark = 'medium'
 colorscheme gruvbox
 " goyo.vim
 nnoremap <leader>c :Goyo<CR>
-
-" Shortcuts for jumping between buffers
-nnoremap <silent> [b :bprevious<CR> 
-nnoremap <silent> ]b :bnext<CR> 
-nnoremap <silent> [B :bfirst<CR> 
-nnoremap <silent> ]B :blast<CR> 
 
 " Yankes (pastes) chunks to (from) clipboard
 noremap <leader>y "+y
@@ -102,19 +94,34 @@ noremap <C-K> <C-W>k
 noremap <C-H> <C-W>h
 noremap <C-L> <C-W>l
 
+" Shortcuts for jumping between buffers
+nnoremap <silent> [b :bprevious<CR> 
+nnoremap <silent> ]b :bnext<CR> 
+nnoremap <silent> [B :bfirst<CR> 
+nnoremap <silent> ]B :blast<CR> 
+
+" Buffer(s) manipulations
+nnoremap <leader>s :w<CR>
+nnoremap <leader>as :wa<CR>
+nnoremap <expr><silent> <leader>q bufname('%') == '' ? ':q<CR>' : ':bw<CR>'
+nnoremap <leader>aq :qa<CR>
+nnoremap <leader>ax :qa!<CR>
+nnoremap <leader>my :tabedit $MYVIMRC<CR>
+nnoremap <leader><CR> :source $MYVIMRC<CR>
+
 " Aliases        
 call SetupCommandAlias("H","vert h")
 call SetupCommandAlias("Vb","vert belowright sb")
 
 " Other shortcuts
-nnoremap <leader><CR> :source $MYVIMRC<CR>
-nnoremap <leader>+ :vertical resize +5<CR>
-nnoremap <leader>- :vertical resize -5<CR>
 noremap <leader>o o<esc>
 noremap <leader>O O<esc>
+nnoremap <silent> <leader>h :setlocal hlsearch!<CR>
+nnoremap <silent> <leader>+ :vertical resize +5<CR>
+nnoremap <silent> <leader>- :vertical resize -5<CR>
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+map <F5> :setlocal spell! spelllang=en_us,uk<CR>
 if has('nvim')
     tnoremap <Esc> <C-\><C-n>
     tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 endif
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-map <F5> :setlocal spell! spelllang=en_us,uk<CR>

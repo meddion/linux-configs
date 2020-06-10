@@ -1,5 +1,5 @@
 # Sources .bashrc
-[[ -n $BASH_VERSION ]] && [[ -f "~/.bashrc" ]] && . "~/.bashrc"
+[[ $BASH_VERSION != "" ]] && [[ -e "~/.bashrc" ]] && . "~/.bashrc"
 # Sets PATH so it includes user's private bin if it exists
 [[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH" 
 # Sets PATH so it includes user's private bin if it exists
@@ -7,7 +7,7 @@
 
 # Manages tmp dir at home
 mkdir -p "$HOME"/tmp
-[[ -n "$(ls -A "$HOME"/tmp)" ]] && rm -rf "$HOME"/tmp/*
+[[ "`ls -A "$HOME"/tmp`" != "" ]] && rm -rf "$HOME"/tmp/*
 
 # Some handy variables
 export XDG_DATA_HOME="$HOME"/.config

@@ -13,3 +13,4 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 
 "Shows dot files
 let NERDTreeShowHidden=1
+let NERDTreeMinimalUI=1

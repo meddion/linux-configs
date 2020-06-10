@@ -1,0 +1,8 @@
+{
+    "coc.preferences.formatOnSaveFiletypes": [
+        "rust",
+        "json"
+    ],
+    //"suggest.autoTrigger": "none",
+    "json.trace.server": "verbose"
+}
