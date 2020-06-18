@@ -1,0 +1,11 @@
+# This file is used to customize the behaviour of Readline. 
+# Readline is a library by the GNU Project, used by Bash
+# and other CLI-interface programs to edit and interact
+# with the command line. 
+
+set bell-style none
+set editing-mode vi
+set show-mode-in-prompt on
+# Specifies a different cursor shape for each mode
+set vi-ins-mode-string \1\e[6 q\2
+set vi-cmd-mode-string \1\e[2 q\2
