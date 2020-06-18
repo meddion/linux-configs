@@ -1,0 +1,192 @@
+exec_always --no-startup-id autotiling
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
+# Set primary gruvbox colorscheme colors
+set $bg #282828
+set $red #cc241d
+set $green #98971a
+set $yellow #d79921
+set $blue #458588
+set $purple #b16286
+set $aqua #689d68
+set $gray #a89984
+set $darkgray #1d2021
+
+# class                 border|backgr|text|indicator|child_border
+#client.focused          $green $green $darkgray $purple $green
+client.focused          $blue $blue $darkgray $green $blue
+client.focused_inactive $darkgray $darkgray $yellow $green $darkgray
+client.unfocused        $darkgray $darkgray $yellow $green $darkgray
+client.urgent           $red $red $white $red $red
+
+hide_edge_borders both
+
+# Font
+font pango:Hack 12
+
+# Variables 
+set $mod Mod4
+set $alt Mod1
+set $browser firefox --new-tab  
+set $editor nvim 
+set $pic_dir ~/Pictures
+set $term --no-startup-id alacritty
+set $shell_config ~/.bashrc
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Gaps
+set $inner_gaps 0
+set $outer_gaps 1 
+smart_gaps on
+smart_borders on
+for_window [class="^.*"] border pixel 3
+gaps inner $inner_gaps
+gaps outer $outer_gaps
+bindsym $mod+g gaps inner current set $inner_gaps; gaps outer current set $outer_gaps
+bindsym $mod+Shift+g gaps inner current set 0; gaps outer current set 0
+
+# Basic Bindings
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+Return exec $term --working-directory $(xcwd)
+bindsym $mod+q [con_id="__focused__" instance="^(?!dropdown_).*$"] kill
+bindsym $mod+Shift+q [con_id="__focused__" instance="^(?!dropdown_).*$"] exec --no-startup-id kill -9 `xdotool getwindowfocus getwindowpid`
+bindsym $mod+u [urgent=latest] focus
+bindsym $mod+i fullscreen disable; floating enable; resize set 500 300; sticky enable; move position 4610 1130
+bindsym $mod+apostrophe split horizontal ;; exec $term
+bindsym $mod+slash split vertical ;; exec $term
+bindsym $mod+d exec --no-startup-id rofi -matching fuzzy -combi-modi drun#window#ssh -show combi -font "FiraCode Nerd 12" -theme ".config/rofi/slate.ras" -icon-theme "Numix-Circle" -show-icons
+
+# Editor bindings
+bindsym $mod+z exec --no-startup-id $term -e $editor $shell_config 
+bindsym $mod+Shift+z exec --no-startup-id $term -e $editor ~/.config/i3/config 
+bindsym $mod+v exec --no-startup-id $term -e $editor
+
+# $pic_dir
+bindsym $mod+y exec --no-startup-id flameshot gui -p $pic_dir/screenshots
+bindsym $mod+Shift+y exec --no-startup-id flameshot full -c -p $pic_dir/screenshots
+bindsym $mod+b exec --no-startup-id feh --bg-fill --randomize $pic_dir/wallpapers/*
+
+# Toggles 
+bindsym $mod+s sticky toggle;
+bindsym $mod+Shift+s split toggle
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+f floating toggle
+
+# h
+bindsym $mod+h focus left
+bindsym $mod+Shift+h move left 30
+bindsym $mod+Ctrl+h	move workspace to output left
+# j
+bindsym $mod+j focus down
+bindsym $mod+Shift+j move down 30
+bindsym $mod+Ctrl+j	move workspace to output down
+# k
+bindsym $mod+k focus up
+bindsym $mod+Shift+k move up 30
+bindsym $mod+Ctrl+k	move workspace to output up
+# l
+bindsym $mod+l focus right
+bindsym $mod+Shift+l move right 30
+bindsym $mod+Ctrl+l	move workspace to output right
+
+# System control bindings
+bindsym $mod+x exec --no-startup-id askwindow "Do you want to reboot?" reboot
+bindsym $mod+Shift+x exec --no-startup-id askwindow "Do you want to shutdown?" shutdown -h now
+bindsym $mod+Shift+Escape exec --no-startup-id askwindow "Do you want to hibernate?" systemctl hibernate
+bindsym $mod+e exec --no-startup-id lock
+bindsym $mod+Shift+e exec --no-startup-id askwindow "Do you want to suspend?" systemctl suspend
+#bindsym $mod+shift+F2 --no-startup-id askwindow "Do you want to restart NetworkManager?" systemctl restart networkmanager
+
+# Application bindings 
+bindsym $mod+c exec --no-startup-id telegram-desktop
+bindsym $mod+Shift+c exec --no-startup-id discord
+bindsym $mod+p exec --no-startup-id evince; workspace $ws3
+bindsym $mod+n exec --no-startup-id nautilus $(xcwd)
+bindsym $mod+m exec --no-startup-id $browser https://deezer.com/us/; workspace $ws2
+bindsym $mod+w exec --no-startup-id $browser https://duckduckgo.com; workspace $ws2
+bindsym $mod+r exec $term -e ranger
+bindsym $mod+t exec $term -e ytop
+
+# Function Buttons
+bindsym $mod+F1 restart
+bindsym $mod+F2 exec $term -e nmtui
+
+# http://wiki.linuxquestions.org/wiki/XF86_keyboard_symbols
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle # mute sound
+
+# Brightness control
+bindsym XF86MonBrightnessUp  exec --no-startup-id xbacklight -inc 10% 
+bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10% 
+
+# Workspaces 
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# Workspace Bindings
+bindsym $mod+Tab workspace next
+bindsym $mod+backslash workspace back_and_forth
+
+# To find out app's classname use: xprop | grep -i class 
+assign [class="firefox"] $ws2
+for_window [class="firefox"] move to workspace $ws2; workspace $ws2
+assign [class="evince"] $ws3
+for_window [class="Evince"] move to workspace $ws3; workspace $ws3
+assign [class="Evince"] $ws4
+for_window [class="TelegramDesktop"] move to workspace $ws4; workspace $ws4
+assign [class="discord"] $ws5
+for_window [class="discord"] move to workspace $ws5; workspace $ws5
+# Assing autofloat
+for_window [title=".*Emulator.*"] floating enable
+for_window [window_role="GtkFileChooserDialog"] resize set 800 600
+for_window [window_role="GtkFileChooserDialog"] move position center
+
+# Switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1; workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2; workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3; workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4; workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5; workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6; workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10; workspace $ws10
+
+# Arrow Keys
+bindsym $mod+Left focus left
+bindsym $mod+Shift+Left resize shrink width 5 px or 5 ppt
+bindsym $mod+Ctrl+Leftmove workspace to output right
+bindsym $mod+Down focus down
+bindsym $mod+Shift+Down resize shrink height 5 px or 5 ppt
+bindsym $mod+Ctrl+Down move workspace to output up
+bindsym $mod+Up focus up
+bindsym $mod+Shift+Up resize grow height 5 px or 5 ppt
+bindsym $mod+Ctrl+Up move workspace to output down
+bindsym $mod+Right focus right
+bindsym $mod+Shift+Right resize grow width 5 px or 5 ppt
+bindsym $mod+Ctrl+Right	move workspace to output left

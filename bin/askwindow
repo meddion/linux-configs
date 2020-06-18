@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if (( $# < 2 )); then
+    echo "Wrong usage!"
+    exit 1
+fi
+zenity --text="$1" --width=200 --height=100 \
+    --ok-label="Proceed" --cancel-label="Abort" --timeout=5 --question
+if [[ $? = 0 ]]; then
+    shift
+    exec $*
+fi
